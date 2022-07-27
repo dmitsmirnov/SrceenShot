@@ -9,6 +9,11 @@ import UIKit
 
 class ScreenTableViewCell: UITableViewCell {
     
+    enum TypeOfWin {
+        case win
+        case lost
+    }
+    
     struct ViewModel {
         var bet: String
         var result: String
@@ -19,8 +24,10 @@ class ScreenTableViewCell: UITableViewCell {
         var typeOfBet: String
         var numberScreen: String
         var dateScreen: String
+        var typeOfWin: TypeOfWin
         
-        //var image: String
+        var typeOfImage: Int
+        
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -35,7 +42,6 @@ class ScreenTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        self.photoImage.image = nil
         self.betLabel.text = nil
         self.typeOfBetLabel.text = nil
         self.dateLabel.text = nil
@@ -50,14 +56,17 @@ class ScreenTableViewCell: UITableViewCell {
     }()
     
     private lazy var photoImage: UIImageView = {
+        
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         
         //imageView.contentMode = .scaleAspectFill
-        imageView.image = UIImage(named: "ScreenEmpty_2.png")
-        
-        //imageView.layer.cornerRadius = 12
-        
+        if self.typeOfWin == TypeOfWin.win {
+            imageView.image = UIImage(named: "ScreenEmpty_2.png")
+        } else {
+            imageView.image = UIImage(named: "ScreenEmpty_lost.png")
+        }
+               
         return imageView
     }()
     
@@ -72,7 +81,9 @@ class ScreenTableViewCell: UITableViewCell {
     private lazy var resultLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor(hexString: "4CB66A")
+        //label.textColor = UIColor(hexString: "4CB66A")
+        //label.textColor = UIColor(hexString: "BE8433")
+        label.textColor = .white
         
         return label
     }()
@@ -81,8 +92,6 @@ class ScreenTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        
-        //label.text = getNumber()
         
         return label
     }()
@@ -175,8 +184,7 @@ class ScreenTableViewCell: UITableViewCell {
         self.photoImage.leadingAnchor.constraint(equalTo: self.backView.leadingAnchor).isActive = true
         self.photoImage.trailingAnchor.constraint(equalTo: self.backView.trailingAnchor).isActive = true
        
-        self.backView.heightAnchor.constraint(equalToConstant: 253).isActive = true
-        
+        //self.backView.heightAnchor.constraint(equalToConstant: 253).isActive = true
         
         self.indexLabel.topAnchor.constraint(equalTo: self.backView.topAnchor, constant: 135).isActive = true
         self.indexLabel.trailingAnchor.constraint(equalTo: self.backView.trailingAnchor, constant: -15).isActive = true
@@ -205,8 +213,9 @@ class ScreenTableViewCell: UITableViewCell {
         //self.typeOfBetLabel.topAnchor.constraint(equalTo: self.backView.topAnchor, constant: 138).isActive = true
         self.typeOfBetLabel.leadingAnchor.constraint(equalTo: self.backView.leadingAnchor, constant: 15).isActive = true
         
-        
     }
+    
+    var typeOfWin: TypeOfWin = TypeOfWin.win
     
     func setupValue(viewModel: ViewModel) {
         
@@ -219,8 +228,20 @@ class ScreenTableViewCell: UITableViewCell {
         self.typeOfBetLabel.text = viewModel.typeOfBet
         self.dateLabel.text = viewModel.dateScreen
         
-        //imageView.image = UIImage(named: "ScreenEmpty_2.png")
-        //self.photoImage.image = UIImage(named: viewModel.image)
+        self.typeOfWin = viewModel.typeOfWin
+        
+        if viewModel.typeOfImage == 0 {
+            if viewModel.typeOfWin == TypeOfWin.win {
+                self.photoImage.image = UIImage(named: "ScreenEmpty_2.png")
+                self.resultLabel.textColor = UIColor(hexString: "4CB66A")
+            } else if viewModel.typeOfWin == TypeOfWin.lost {
+                self.photoImage.image = UIImage(named: "ScreenEmpty_lost.png")
+                //self.resultLabel.textColor = .white
+            }
+        } else {
+            self.photoImage.image = UIImage(named: "AdoptedBet.png")
+            self.resultLabel.textColor = .white
+        }
         
         var constant = 0
         if viewModel.typeOfTime == 0 {
@@ -239,9 +260,27 @@ class ScreenTableViewCell: UITableViewCell {
         self.typeOfBetLabel.topAnchor.constraint(equalTo: self.backView.topAnchor, constant: CGFloat(constant)).isActive = true
         
     }
-    
-    func changeImage(name: String) {
-        self.photoImage.image = UIImage(named: name)
+        
+    func getStatusLost() {
+        self.photoImage.image = UIImage(named: "ScreenEmpty_lost.png")
+        self.typeOfWin = TypeOfWin.lost
+        self.resultLabel.isHidden = true
+        //model.typeOfWin = TypeOfWin.lost
     }
     
+    func getStatusWin() {
+        self.photoImage.image = UIImage(named: "ScreenEmpty_2.png")
+        self.typeOfWin = TypeOfWin.win
+        self.resultLabel.isHidden = false
+        self.resultLabel.textColor = UIColor(hexString: "4CB66A")
+        //model.typeOfWin = TypeOfWin.win
+    }
+    
+    func changeTypeWin() {
+        if self.typeOfWin == TypeOfWin.win {
+            self.typeOfWin = TypeOfWin.lost
+        } else {
+            self.typeOfWin = TypeOfWin.win
+        }
+    }
 }

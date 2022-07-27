@@ -15,6 +15,9 @@ class ScreensViewController: UIViewController {
         table.translatesAutoresizingMaskIntoConstraints = false
         table.backgroundColor = .clear
         
+        table.rowHeight = UITableView.automaticDimension
+        table.estimatedRowHeight = 44
+        
         table.delegate = self
         table.dataSource = self
         
@@ -56,51 +59,22 @@ class ScreensViewController: UIViewController {
         imageView3.widthAnchor.constraint(equalToConstant: 83).isActive = true
         imageView3.heightAnchor.constraint(equalToConstant: 23).isActive = true
         
-        //let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let buttonItem = UIBarButtonItem(customView: imageView)
-        let buttonItem2 = UIBarButtonItem(customView: imageView2)
         let buttonItem3 = UIBarButtonItem(customView: imageView3)
         
         //buttonItem2.customView?.leadingAnchor.constraint(equalTo: buttonItem.customView!.trailingAnchor, constant: 50).isActive = true
-        
-        
-        //self.navigationController?.navigationBar.
-        //buttonItem.imageInsets = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 50)
-        //let space = NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: self.navigationController?.navigationBar, attribute: .leading, multiplier: 1, constant: 50).isActive = true
-        
-        //imageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        //imageView.leadingAnchor.constraint(equalTo: imageView2.trailingAnchor, constant: 100).isActive = true
-        
-        //imageView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 50).isActive = true
-        
         //self.navigationItem.rightBarButtonItems = [buttonItem, buttonItem2]
         self.navigationItem.setRightBarButtonItems([buttonItem3], animated: false)
         
-        
     }
-    
     
     var dataSource: [ScreenTableViewCell.ViewModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.setupView()
-        
-        //self.dataSource = [1,2,3,4,5]
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+    //var isExpanded: Bool = false
 }
 
 extension ScreensViewController: UITableViewDelegate, UITableViewDataSource {
@@ -126,7 +100,7 @@ extension ScreensViewController: UITableViewDelegate, UITableViewDataSource {
         //self.tableView.reloadRows(at: [indexPath], with: .automatic)
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressCell(sender:)))
         
-        longPress.minimumPressDuration = 0.7
+        longPress.minimumPressDuration = 0.5
         cell.addGestureRecognizer(longPress)
         
         return cell
@@ -137,9 +111,7 @@ extension ScreensViewController: UITableViewDelegate, UITableViewDataSource {
         if sender.state == .began {
             AudioServicesPlaySystemSound(1519)
         }
-    
         print(sender.location(in: self.tableView))
-        
     }
     
     
@@ -163,22 +135,41 @@ extension ScreensViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //print("123")
+        
+        AudioServicesPlaySystemSound(1519)
         
         let cell = tableView.cellForRow(at: indexPath) as? ScreenTableViewCell
-        
-        cell?.changeImage(name: "ScreenEmpty_lost.png")
-        
-        //self.dataSource[indexPath.row].image = "ScreenEmpty_lost.png"
-        //self.dataSource[indexPath.row].result = "7777"
-        //self.tableView.reloadRows(at: [indexPath], with: .fade)
+
+        if dataSource[indexPath.row].typeOfWin == ScreenTableViewCell.TypeOfWin.win {
+            dataSource[indexPath.row].typeOfWin = ScreenTableViewCell.TypeOfWin.lost
+            cell?.getStatusLost()
+        } else {
+            dataSource[indexPath.row].typeOfWin = ScreenTableViewCell.TypeOfWin.win
+            cell?.getStatusWin()
+        }
+    
+        //self.isExpanded = !self.isExpanded
+        self.tableView.beginUpdates()
+        self.tableView.endUpdates()
         
     }
     
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 100
-//    }
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+//        return UITableView.automaticDimension
+        if dataSource[indexPath.row].typeOfWin == ScreenTableViewCell.TypeOfWin.win {
+            return 253
+        } else {
+            return 225
+        }
+        
+//        if isExpanded {
+//            return 200
+//        } else {
+//            return 250
+//        }
+
+    }
     
 }
 

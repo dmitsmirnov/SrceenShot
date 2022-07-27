@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "ScreensViewController.tableView(_:cellForRowAt:):ScreensViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.dataSource[1]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ScreensViewController.tableView(_:heightForRowAt:):ScreensViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "dataSource[1].typeOfWin">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ScreenTableViewCell.changeTypeWin():ScreenTableViewCell.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.typeOfWin">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ScreensViewController.tableView(_:didSelectRowAt:):ScreensViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "cell?.getTypeWin()">
+            </PersistentString>
+            <PersistentString
+               value = "dataSource[indexPath.row].typeOfWin">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.addScreenShot():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.typeOfScreen.selectedSegmentIndex">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ScreenTableViewCell.setupValue(viewModel:):ScreenTableViewCell.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.typeOfBetLabel.topAnchor">
+            </PersistentString>
+            <PersistentString
+               value = "viewModel.typeOfTime">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.presentSecondView():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "screenController">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

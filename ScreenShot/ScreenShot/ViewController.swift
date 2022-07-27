@@ -10,13 +10,6 @@ import AudioToolbox
 
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
 
-    //@IBOutlet weak var createButton: UIButton!
-    
-    //@IBOutlet weak var typeBetPickerView: UIPickerView!
-    
-    //@IBOutlet weak var typeOfBetControl: UISegmentedControl!
-
-    //var pickerData: [[String]] = [[String]]()
     var pickerDataTime: [String] = [String]()
     
     private lazy var team1Label: UILabel = {
@@ -234,6 +227,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         control.setTitle("1-ый Тайм", forSegmentAt: 0)
         control.setTitle("2-ой Тайм", forSegmentAt: 1)
         
+        control.selectedSegmentTintColor = .systemGray3
+        
         control.selectedSegmentIndex = 0
         
         return control
@@ -265,11 +260,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         control.insertSegment(with: nil, at: 0, animated: true)
         control.insertSegment(with: nil, at: 1, animated: true)
         control.setTitle("выплачена", forSegmentAt: 0)
-        control.setTitle("проиграна", forSegmentAt: 1)
+        control.setTitle("принята", forSegmentAt: 1)
         
         control.selectedSegmentIndex = 0
         
-        control.selectedSegmentTintColor = .green
+        control.selectedSegmentTintColor = .systemGreen
         
         control.addTarget(self, action: #selector(changeColorControl), for: .valueChanged)
         
@@ -277,20 +272,21 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }()
     
     var screenController = ScreensViewController()
-    //var x = ScreenTableViewCell.ViewModel(bet: "test")
     
     @objc private func changeColorControl() {
         if self.typeOfScreen.selectedSegmentIndex == 0 {
             self.typeOfScreen.selectedSegmentTintColor = .systemGreen
         } else {
-            self.typeOfScreen.selectedSegmentTintColor = .systemPink
+            self.typeOfScreen.selectedSegmentTintColor = .systemOrange
         }
         //print("I ❤️ Swift".utf8.count)
     }
     
     @objc private func presentSecondView() {
         
-        screenController.tableView.reloadData()
+        self.screenController.tableView.reloadData()
+        //screenController.tableView.beginUpdates()
+        //screenController.tableView.endUpdates()
         //screenController.tableView.reloadRows(at: <#T##[IndexPath]#>, with: .automatic)
         
         self.navigationController?.pushViewController(self.screenController, animated: true)
@@ -303,22 +299,20 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     func getNumber() -> String {
     
         var dateComponents = DateComponents()
-        //dateComponents.timeZone = TimeZone(abbreviation: "UTC")
-        dateComponents.hour = 19
-        dateComponents.minute = 09
+        dateComponents.hour = 22
+        dateComponents.minute = 19
         dateComponents.second = 00
         dateComponents.year = 2022
-        dateComponents.month = 04
-        dateComponents.day = 14
+        dateComponents.month = 05
+        dateComponents.day = 26
 
         let calendar = Calendar.current
         let dateFromDC = calendar.date(from: dateComponents)
 
-        let numberStart: Int = 26223620725
+        let numberStart: Int = 27281096863
         let numberCount: Int = 319 // in sec
 
         let dateNow = Date()
-
         let dateDef = Calendar.current.dateComponents([.second], from: dateFromDC!, to: dateNow)
 
         return String(dateDef.second! * numberCount + numberStart)
@@ -351,11 +345,15 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                                                   typeOfTime: selectTypeOfTime,
                                                   typeOfBet: selectTypeOfBet,
                                                   numberScreen: getNumber(),
-                                                  dateScreen: dateF.string(from: dateNow))
+                                                  dateScreen: dateF.string(from: dateNow),
+                                                  
+                                                  typeOfWin: ScreenTableViewCell.TypeOfWin.win,
+                                                  typeOfImage: self.typeOfScreen.selectedSegmentIndex)
        
-        self.screenController.dataSource.append(model)
+        self.screenController.dataSource.insert(model, at: 0)
         self.numberScreen += 1
         self.createScreenButton.setTitle("создать (\(self.numberScreen))", for: .normal)
+        
         AudioServicesPlaySystemSound(1519)
         
     }
@@ -368,36 +366,9 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         super.viewDidLoad()
         
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .systemGray3
         self.navigationItem.title = "Настройки"
         
-//        team1TextField.layer.borderColor = UIColor.systemBlue.cgColor
-//        team1TextField.layer.borderWidth = 1.0
-//        team1TextField.layer.cornerRadius = 12
-//        team1TextField.indent(size: 15)
-        
-//        team2TextField.layer.borderColor = UIColor.systemBlue.cgColor
-//        team2TextField.layer.borderWidth = 1.0
-//        team2TextField.layer.cornerRadius = 12
-//        team2TextField.indent(size: 5)
-        
-//        championatTextField.layer.borderColor = UIColor.systemBlue.cgColor
-//        championatTextField.layer.borderWidth = 1.0
-//        championatTextField.layer.cornerRadius = 12
-//        championatTextField.indent(size: 5)
-        
-//        valueBetTextField.layer.borderColor = UIColor.systemBlue.cgColor
-//        valueBetTextField.layer.borderWidth = 1.0
-//        valueBetTextField.layer.cornerRadius = 12
-//        valueBetTextField.indent(size: 5)
-//
-//        indexTextField.layer.borderColor = UIColor.systemBlue.cgColor
-//        indexTextField.layer.borderWidth = 1.0
-//        indexTextField.layer.cornerRadius = 12
-//        indexTextField.indent(size: 5)
-        
-        //team1TextField.text = "Манчего"
-        //team2TextField.text = "Вилларробледо"
         championShipTextField.text = "Футбол. Чемпионат "
         valueBetTextField.text = "1000"
         indexTextField.text = "1.8"
@@ -406,19 +377,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         pickerDataTime = ["Тотал (0.5) Б",
                           "до 60 мин",
                           "до 75 мин"]
-        //                  "Гол номер 1 будет забит до 60 минут - Да",
-        //                  "Гол номер 1 будет забит до 75 минут - Да"]
-        
-        
-        //self.team1TextField.autocorrectionType = .no
-        //self.team2TextField.autocorrectionType = .no
-        
-        //self.championShipTextField.autocorrectionType = .no
-        
-//        self.typeBetPickerView.tintColor = .red
-//        self.typeBetPickerView.layer.cornerRadius = 12
-//        self.typeBetPickerView.setValue(UIColor.black, forKey: "textColor")
-//        self.typeBetPickerView.backgroundColor = .white
         
         self.setupView_2()
         
@@ -430,7 +388,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         
         //self.team2TextField.autocapitalizationType = UITextAutocapitalizationType.words
-        //self.team2TextField.tintColor = .black
         self.championShipTextField.autocapitalizationType = UITextAutocapitalizationType.words
         self.championShipTextField.tintColor = .black
         
@@ -500,8 +457,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     private func setupView_2() {
-        
-        //self.createButton.isHidden = true
         
         self.view.addSubview(self.scrollView)
         self.scrollView.addSubview(self.mainView)
@@ -632,10 +587,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         super.viewWillDisappear(animated)
         
     }
-
-//    @IBAction func createScreenButton(_ sender: Any) {
-//        print(self.team1TextField.text!)
-//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         //super.prepare(for: segue, sender: sender)
@@ -660,7 +611,6 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         super.touchesBegan(touches, with: event)
         //self.view.endEditing(true)
         //self.mainScrollView.endEditing(true)
-        
     }
     
     func getBet(bet: Int) -> String {
